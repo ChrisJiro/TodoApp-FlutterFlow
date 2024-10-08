@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -464,7 +465,26 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                           username: _model.usernameTextController.text,
                         ));
 
-                        context.goNamed('tasks');
+                        context.goNamed(
+                          'tasks',
+                          queryParameters: {
+                            'fromOnboarding': serializeParam(
+                              true,
+                              ParamType.bool,
+                            ),
+                          }.withoutNulls,
+                        );
+
+                        _model.apiResult95f = await SendEmailToUserCall.call(
+                          to: currentUserEmail,
+                          subject: 'Account Creation',
+                          text:
+                              'Thank you for creating your To-do App account!',
+                        );
+
+                        if ((_model.apiResult95f?.succeeded ?? true)) {}
+
+                        safeSetState(() {});
                       },
                       text: 'Complete Profile',
                       options: FFButtonOptions(

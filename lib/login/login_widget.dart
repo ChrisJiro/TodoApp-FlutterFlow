@@ -717,7 +717,23 @@ class _LoginWidgetState extends State<LoginWidget>
                                 return;
                               }
 
-                              context.goNamedAuth('tasks', context.mounted);
+                              context.pushNamedAuth(
+                                'tasks',
+                                context.mounted,
+                                queryParameters: {
+                                  'fromOnboarding': serializeParam(
+                                    false,
+                                    ParamType.bool,
+                                  ),
+                                }.withoutNulls,
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: const TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.fade,
+                                    duration: Duration(milliseconds: 0),
+                                  ),
+                                },
+                              );
                             },
                             text: 'Login',
                             options: FFButtonOptions(

@@ -1,16 +1,23 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/add_task_widget.dart';
+import '/components/email_popup_widget.dart';
 import '/components/task_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'tasks_model.dart';
 export 'tasks_model.dart';
 
 class TasksWidget extends StatefulWidget {
-  const TasksWidget({super.key});
+  const TasksWidget({
+    super.key,
+    bool? fromOnboarding,
+  }) : fromOnboarding = fromOnboarding ?? false;
+
+  final bool fromOnboarding;
 
   @override
   State<TasksWidget> createState() => _TasksWidgetState();
@@ -25,6 +32,29 @@ class _TasksWidgetState extends State<TasksWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TasksModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (widget.fromOnboarding) {
+        await showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          enableDrag: false,
+          context: context,
+          builder: (context) {
+            return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Padding(
+                padding: MediaQuery.viewInsetsOf(context),
+                child: const EmailPopupWidget(),
+              ),
+            );
+          },
+        ).then((value) => safeSetState(() {}));
+      } else {
+        return;
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }

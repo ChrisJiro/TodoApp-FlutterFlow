@@ -90,8 +90,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'tasks',
           path: '/tasks',
-          builder: (context, params) =>
-              params.isEmpty ? const NavBarPage(initialPage: 'tasks') : const TasksWidget(),
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'tasks')
+              : TasksWidget(
+                  fromOnboarding: params.getParam(
+                    'fromOnboarding',
+                    ParamType.bool,
+                  ),
+                ),
         ),
         FFRoute(
           name: 'onboarding',
